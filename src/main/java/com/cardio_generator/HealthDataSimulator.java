@@ -27,8 +27,7 @@ import java.util.ArrayList;
 
 /**
  * Simulates health data for patients and outputs it.
- *
- * <p>This class is the main method for the health data simulation system.
+ * This class is the main method for the health data simulation system.
  * It makes sure that users can configure the number of patients and output method through command-line.
  *
  */
@@ -165,8 +164,7 @@ public class HealthDataSimulator {
 
     /**
      * Schedules data generation tasks for each patient.
-     *
-     * <p>Makes instances of data generators and schedules them to run
+     * Makes instances of data generators and schedules them to run
      * at different intervals for each patient.
      *
      * @param patientIds list of patient IDs
