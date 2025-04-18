@@ -1,0 +1,13 @@
+Data Access Layer – Class Diagram Explanation
+The Data Access Layer connects the outside world—like the data generator or simulator—to the internal CHMS system.
+This part of the system is designed so that it does not matter how the data arrives: it could come in through a TCP connection, a WebSocket, or from a file.
+All these sources use the same interface, called DataListener.
+This interface defines standard methods like listen() and stop(), so every listener works in a similar way
+There are three main types of listeners: TCPDataListener, WebSocketDataListener, and FileDataListener.
+Each one knows how to receive data from its specific source. When data comes in, it is sent to a DataParser.
+The parser converts different data formats (like JSON or CSV) into a standard format called ParsedData, which holds the patient ID, timestamp, type, and value.
+Once the data is parsed, it is handed over to the DataSourceAdapter. This adapter’s job is to take the standardized data and store it in the system using the DataStorage class.
+This way, the rest of the system does not need to know where the data came from or what format it was in originally.
+All listener classes inherit from the DataListener interface.
+Each listener uses a DataParser to process incoming data and then passes the results to a DataSourceAdapter.
+The adapter is responsible for sending the parsed data to DataStorage.
