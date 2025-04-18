@@ -1,0 +1,11 @@
+Patient Identification System – Class Diagram Explanation
+The Patient Identification System manages how every patient in the CHMS is uniquely identified and how their medical records are organized.
+The main class, Patient, stores a unique patient ID and a list of medical records (PatientRecord).
+Each PatientRecord contains details about a specific measurement, such as the type, value, and timestamp.
+It’s s linked to a patient by their ID.
+The DataStorage class keeps track of all patients in the system, making it possible to add new data, retrieve records for a specific patient, and get a list of all patients.
+To manage and verify patient identities, the IdentityManager class maintains a collection of registered patients and provides methods to register new patients, find patients by ID, and authenticate them.
+The PatientIdentifier class is responsible for generating and validating unique patient IDs, following specific rules.
+The Staff class represents medical staff who can access patient data and authenticate themselves in the system.
+The diagram shows aggregation between DataStorage and Patient, and between Patient and PatientRecord, as well as between IdentityManager and Patient.
+There are also associations between Staff and IdentityManager, and between PatientIdentifier and Patient.
