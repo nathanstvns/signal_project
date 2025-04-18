@@ -1,0 +1,13 @@
+Data Storage System – Class Diagram Explanation
+
+The Data Storage System is responsible for securely storing and organizing all patient health data in the CHMS.
+The main class, DataStorage, keeps a map of all patients, each identified by a unique patient ID.
+Each Patient object contains a list of PatientRecord objects, which store single health measurements (like heart rate or blood pressure) with a timestamp and type.
+Data is added to the system using the addPatientData method in DataStorage.
+If a patient does not exist yet, a new Patient object is created.
+Patient records can be retrieved for a specific patient and time range using the getRecords method.
+The DataReader interface allows different ways to bring new data into the system, such as from files or network sources.
+For queries and analysis, the DataRetriever class provides methods to search for records by patient or time range, and to list all patients.
+It also supports access control with an accessLevel attribute, so only authorized users can view or change data.
+The diagram shows aggregation between DataStorage and Patient, and between Patient and PatientRecord, meaning each storage contains many patients, and each patient has many records.
+Associations connect DataReader and DataRetriever to DataStorage.

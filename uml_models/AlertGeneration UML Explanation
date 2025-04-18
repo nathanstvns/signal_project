@@ -1,0 +1,10 @@
+Alert Generation System – Class Diagram Explanation
+The Alert Generation System monitors patient data and triggers alerts when a patient’s health values cross critical thresholds.
+The main class, AlertGenerator, checks incoming patient data using information from the DataStorage class, which stores all patient records in the system.
+Each patient is represented by a Patient object, which keeps a list of PatientRecord objects.
+These PatientRecord objects store individual measurements, such as heart rate or blood pressure, together with a timestamp.
+When the AlertGenerator detects that a value is outside the safe range for a patient, it creates an Alert object containing the patient ID, the condition that triggered the alert, and the time it happened (timestamp).
+The alert is then sent to the AlertManager.
+In the diagram, AlertGenerator is connected to both DataStorage (for accessing patient data) and AlertManager (for sending alerts).
+AlertManager manages a collection of Alert objects, while DataStorage manages all Patient objects, and each Patient manages their own PatientRecord objects.
+This design keeps responsibilities clear and separated: data is stored and retrieved by DataStorage, alerts are created by AlertGenerator, and managed by AlertManager.
