@@ -20,6 +20,7 @@ public class TestAlerts {
 
     private BloodPressureStrategy bloodPressureStrategy = new BloodPressureStrategy();
     private BloodOxygenStrategy bloodOxygenStrategy = new BloodOxygenStrategy();
+    private HypoxemiaStrategy hypoxemiaStrategy = new HypoxemiaStrategy();
 
     @Test
     void testCriticalSystolicAlert() {
@@ -119,6 +120,45 @@ public class TestAlerts {
         patient.addRecord(92.0, "BloodOxygen", time + 700_000); // More than 10 minutes later
 
         bloodOxygenStrategy.checkAlert(patient, mockGenerator);
+
+        verify(mockGenerator, never()).triggerAlert(any(Alert.class));
+    }
+    @Test
+    void testHypotensiveHypoxemiaAlert() {
+        Patient patient = new Patient(1);
+        long time = System.currentTimeMillis();
+
+        //  both low BP and low oxygen
+        patient.addRecord(88.0, "BloodPressure_Systolic", time);
+        patient.addRecord(91.0, "BloodOxygen", time + 1000);
+
+        hypoxemiaStrategy.checkAlert(patient, mockGenerator);
+
+        verify(mockGenerator).triggerAlert(any(Alert.class));
+    }
+    @Test
+    void testNoAlertWithNormalBloodPressure() {
+        Patient patient = new Patient(1);
+        long time = System.currentTimeMillis();
+
+        // Normal BP but low oxygen, shouldnt trigger
+        patient.addRecord(95.0, "BloodPressure_Systolic", time);
+        patient.addRecord(91.0, "BloodOxygen", time + 1000);
+
+        hypoxemiaStrategy.checkAlert(patient, mockGenerator);
+
+        verify(mockGenerator, never()).triggerAlert(any(Alert.class));
+    }
+    @Test
+    void testNoAlertWithNormalOxygen() {
+        Patient patient = new Patient(1);
+        long time = System.currentTimeMillis();
+
+        // Low BP but normal oxygen, shouldnt trigger
+        patient.addRecord(88.0, "BloodPressure_Systolic", time);
+        patient.addRecord(94.0, "BloodOxygen", time + 1000);
+
+        hypoxemiaStrategy.checkAlert(patient, mockGenerator);
 
         verify(mockGenerator, never()).triggerAlert(any(Alert.class));
     }
