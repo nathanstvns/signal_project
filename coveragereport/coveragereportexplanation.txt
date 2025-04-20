@@ -1,0 +1,1 @@
+Some parts of the code were not tested. The generator and output packages were not tested because they are not part of the alert logic for this assignment. The Alert class was not directly tested since it only contains simple data fields and getters. Most of the tests focus on the alert strategies and patient data management, as required by the project.
