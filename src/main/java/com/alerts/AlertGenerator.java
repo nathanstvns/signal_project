@@ -31,6 +31,8 @@ public class AlertGenerator {
         this.strategies.add(new BloodPressureStrategy());
         this.strategies.add(new BloodOxygenStrategy());
         this.strategies.add(new HypoxemiaStrategy());
+        this.strategies.add(new ECGStrategy()); // Add the new strategy
+
 
     }
 

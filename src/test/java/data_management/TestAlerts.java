@@ -21,6 +21,8 @@ public class TestAlerts {
     private BloodPressureStrategy bloodPressureStrategy = new BloodPressureStrategy();
     private BloodOxygenStrategy bloodOxygenStrategy = new BloodOxygenStrategy();
     private HypoxemiaStrategy hypoxemiaStrategy = new HypoxemiaStrategy();
+    private ECGStrategy ecgStrategy = new ECGStrategy();
+
 
     @Test
     void testCriticalSystolicAlert() {
@@ -162,4 +164,39 @@ public class TestAlerts {
 
         verify(mockGenerator, never()).triggerAlert(any(Alert.class));
     }
+    @Test
+    void testECGPeakAlert() {
+        Patient patient = new Patient(1);
+        long time = System.currentTimeMillis();
+
+        // normal readings (80-90)
+        for (int i = 0; i < 10; i++) {
+            patient.addRecord(80 + Math.random() * 10, "ECG", time + (i * 1000));
+        }
+
+        //  abnormally high reading
+        patient.addRecord(150, "ECG", time + 11000);
+
+        ECGStrategy ecgStrategy = new ECGStrategy();
+        ecgStrategy.checkAlert(patient, mockGenerator);
+
+        verify(mockGenerator).triggerAlert(any(Alert.class));
+    }
+
+    @Test
+    void testNoAlertForNormalECG() {
+        Patient patient = new Patient(1);
+        long time = System.currentTimeMillis();
+
+        // normal ECG readings (around 80-90)
+        for (int i = 0; i < 11; i++) {
+            patient.addRecord(80 + Math.random() * 10, "ECG", time + (i * 1000));
+        }
+
+        ECGStrategy ecgStrategy = new ECGStrategy();
+        ecgStrategy.checkAlert(patient, mockGenerator);
+
+        verify(mockGenerator, never()).triggerAlert(any(Alert.class));
+    }
+
 }
