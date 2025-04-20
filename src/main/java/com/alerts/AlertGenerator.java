@@ -37,7 +37,7 @@ public class AlertGenerator {
      * {@link #triggerAlert}
      * method. This method should define the specific conditions under which an
      * alert
-     * will be triggered.
+     * will be triggered. (I implemented this logic in the specific alert strategy classes for each alert)
      *
      * @param patient the patient data to evaluate for alert conditions
      */
