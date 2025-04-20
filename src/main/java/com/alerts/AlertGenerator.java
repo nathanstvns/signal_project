@@ -3,7 +3,7 @@ package com.alerts;
 import com.data_management.DataStorage;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
-import com.alerts.strategies.BloodPressureStrategy;
+import com.alerts.strategies.*;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -29,6 +29,8 @@ public class AlertGenerator {
         this.dataStorage = dataStorage;
         this.strategies = new ArrayList<>();
         this.strategies.add(new BloodPressureStrategy());
+        this.strategies.add(new BloodOxygenStrategy());
+
     }
 
     /**
