@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import com.data_management.DataStorage;
 import com.data_management.DataReader;
+import com.data_management.FileDataReader;
+
+import java.io.*;
+import java.nio.file.*;
 
 import java.util.List;
 
@@ -46,5 +50,25 @@ class DataStorageTest {
 
         assertEquals(2, records.size());
         assertEquals(100.0, records.get(0).getMeasurementValue());
+    }
+    @Test
+    public void testReadData() throws IOException {
+        DataStorage storage = new DataStorage();
+        FileDataReader reader = new FileDataReader("output");
+
+
+        reader.readData(storage);
+
+
+        List<PatientRecord> records = storage.getRecords(1, 1700000000000L, 1700000002000L);
+
+
+        assertEquals(3, records.size());
+
+
+        PatientRecord firstRecord = records.get(0);
+        assertEquals(1, firstRecord.getPatientId());
+        assertEquals("BloodPressure", firstRecord.getRecordType());
+        assertEquals(120, firstRecord.getMeasurementValue(), 0.001);
     }
 }
