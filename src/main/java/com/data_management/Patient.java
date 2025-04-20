@@ -61,4 +61,9 @@ public class Patient {
         return filteredRecords;
     }
 
+    public int getPatientId() {
+        return this.patientId;
+    }
+
+
 }
