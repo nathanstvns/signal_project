@@ -22,6 +22,7 @@ public class TestAlerts {
     private BloodOxygenStrategy bloodOxygenStrategy = new BloodOxygenStrategy();
     private HypoxemiaStrategy hypoxemiaStrategy = new HypoxemiaStrategy();
     private ECGStrategy ecgStrategy = new ECGStrategy();
+    private TriggeredAlertStrategy triggeredAlertStrategy = new TriggeredAlertStrategy();
 
 
     @Test
@@ -177,7 +178,6 @@ public class TestAlerts {
         //  abnormally high reading
         patient.addRecord(150, "ECG", time + 11000);
 
-        ECGStrategy ecgStrategy = new ECGStrategy();
         ecgStrategy.checkAlert(patient, mockGenerator);
 
         verify(mockGenerator).triggerAlert(any(Alert.class));
@@ -193,10 +193,17 @@ public class TestAlerts {
             patient.addRecord(80 + Math.random() * 10, "ECG", time + (i * 1000));
         }
 
-        ECGStrategy ecgStrategy = new ECGStrategy();
         ecgStrategy.checkAlert(patient, mockGenerator);
 
         verify(mockGenerator, never()).triggerAlert(any(Alert.class));
     }
+    @Test
+    void testTriggeredAlert() {
+        Patient patient = new Patient(1);
+        patient.addRecord(1.0, "TriggeredAlert", System.currentTimeMillis());
 
+        triggeredAlertStrategy.checkAlert(patient, mockGenerator);
+
+        verify(mockGenerator).triggerAlert(any(Alert.class));
+    }
 }
