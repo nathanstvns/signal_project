@@ -1,28 +1,48 @@
 package data_management;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.*;
-
 import com.alerts.Alert;
 import com.alerts.AlertGenerator;
 import com.alerts.strategies.*;
+import com.alerts.factories.*;
 import com.data_management.Patient;
+import static org.mockito.Mockito.lenient;
 
 
 @ExtendWith(MockitoExtension.class)
 public class TestAlerts {
 
+    private BloodPressureStrategy bloodPressureStrategy;
+    private BloodOxygenStrategy bloodOxygenStrategy;
+    private HypoxemiaStrategy hypoxemiaStrategy;
+    private ECGStrategy ecgStrategy;
+    private TriggeredAlertStrategy triggeredAlertStrategy;
+
+
     @Mock
     private AlertGenerator mockGenerator;
 
-    private BloodPressureStrategy bloodPressureStrategy = new BloodPressureStrategy();
-    private BloodOxygenStrategy bloodOxygenStrategy = new BloodOxygenStrategy();
-    private HypoxemiaStrategy hypoxemiaStrategy = new HypoxemiaStrategy();
-    private ECGStrategy ecgStrategy = new ECGStrategy();
-    private TriggeredAlertStrategy triggeredAlertStrategy = new TriggeredAlertStrategy();
+    @BeforeEach
+    void setup() {
+        lenient().when(mockGenerator.getBloodPressureFactory()).thenReturn(new BloodPressureAlertFactory());
+        lenient().when(mockGenerator.getBloodOxygenFactory()).thenReturn(new BloodOxygenAlertFactory());
+        lenient().when(mockGenerator.getECGFactory()).thenReturn(new ECGAlertFactory());
+        lenient().when(mockGenerator.getHypoxemiaFactory()).thenReturn(new HypoxemiaAlertFactory());
+        lenient().when(mockGenerator.getTriggeredAlertFactory()).thenReturn(new TriggeredAlertFactory());
+
+        bloodPressureStrategy = new BloodPressureStrategy();
+        bloodOxygenStrategy = new BloodOxygenStrategy();
+        hypoxemiaStrategy = new HypoxemiaStrategy();
+        ecgStrategy = new ECGStrategy();
+        triggeredAlertStrategy = new TriggeredAlertStrategy();
+    }
+
+
 
 
     @Test
