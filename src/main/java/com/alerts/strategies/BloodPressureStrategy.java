@@ -39,11 +39,13 @@ public class BloodPressureStrategy implements AlertStrategy {
         for (PatientRecord record : records) {
             double value = record.getMeasurementValue();
             if (value > max || value < min) {
-                generator.triggerAlert(new Alert(
-                        String.valueOf(patientId),
-                        "Critical " + type + " Blood Pressure: " + value,
-                        record.getTimestamp()
-                ));
+                generator.triggerAlert(
+                        generator.getBloodPressureFactory().createAlert(
+                                String.valueOf(patientId),
+                                "Critical " + type + " Blood Pressure: " + value,
+                                record.getTimestamp()
+                        )
+                );
             }
         }
     }
@@ -68,11 +70,13 @@ public class BloodPressureStrategy implements AlertStrategy {
                         "Increasing %s Blood Pressure Trend: %.1f → %.1f → %.1f",
                         type, v1, v2, v3
                 );
-                generator.triggerAlert(new Alert(
-                        String.valueOf(patientId),
-                        condition,
-                        r3.getTimestamp() // Use the latest timestamp in the trend
-                ));
+                generator.triggerAlert(
+                        generator.getBloodPressureFactory().createAlert(
+                                String.valueOf(patientId),
+                                condition,
+                                r3.getTimestamp()
+                        )
+                );
             }
             // Check for decreasing trend (each value < previous by more than 10)
             else if ((v1 - v2 > 10) && (v2 - v3 > 10)) {
@@ -80,11 +84,13 @@ public class BloodPressureStrategy implements AlertStrategy {
                         "Decreasing %s Blood Pressure Trend: %.1f → %.1f → %.1f",
                         type, v1, v2, v3
                 );
-                generator.triggerAlert(new Alert(
-                        String.valueOf(patientId),
-                        condition,
-                        r3.getTimestamp()
-                ));
+                generator.triggerAlert(
+                        generator.getBloodPressureFactory().createAlert(
+                                String.valueOf(patientId),
+                                condition,
+                                r3.getTimestamp()
+                        )
+                );
             }
         }
     }

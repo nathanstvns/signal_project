@@ -51,14 +51,16 @@ public class ECGStrategy implements AlertStrategy {
             double currentValue = current.getMeasurementValue();
 
             if (currentValue > average * THRESHOLD_MULTIPLIER) {
-                generator.triggerAlert(new Alert(
-                        String.valueOf(patientId),
-                        String.format("Abnormal ECG Peak: %.1f (%.1f times above average of %.1f)",
-                                currentValue,
-                                currentValue / average,
-                                average),
-                        current.getTimestamp()
-                ));
+                generator.triggerAlert(
+                        generator.getECGFactory().createAlert(
+                                String.valueOf(patientId),
+                                String.format("Abnormal ECG Peak: %.1f (%.1f times above average of %.1f)",
+                                        currentValue,
+                                        currentValue / average,
+                                        average),
+                                current.getTimestamp()
+                        )
+                );
             }
         }
     }

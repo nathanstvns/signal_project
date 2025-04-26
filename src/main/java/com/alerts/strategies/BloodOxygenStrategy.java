@@ -8,6 +8,7 @@ import com.data_management.PatientRecord;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import com.alerts.*;
 
 public class BloodOxygenStrategy implements AlertStrategy {
     private static final String BLOOD_OXYGEN = "BloodOxygen";
@@ -40,11 +41,13 @@ public class BloodOxygenStrategy implements AlertStrategy {
         for (PatientRecord record : records) {
             double value = record.getMeasurementValue();
             if (value < LOW_OXYGEN_THRESHOLD) {
-                generator.triggerAlert(new Alert(
-                        String.valueOf(patientId),
-                        "Low Blood Oxygen: " + value + "%",
-                        record.getTimestamp()
-                ));
+                generator.triggerAlert(
+                        generator.getBloodOxygenFactory().createAlert(
+                                String.valueOf(patientId),
+                                "Low Blood Oxygen: " + value + "%",
+                                record.getTimestamp()
+                        )
+                );
             }
         }
     }
@@ -69,15 +72,17 @@ public class BloodOxygenStrategy implements AlertStrategy {
 
                     // Check if there's a drop < 5 %
                     if (valueDiff >= RAPID_DROP_THRESHOLD) {
-                        generator.triggerAlert(new Alert(
-                                String.valueOf(patientId),
-                                String.format("Rapid Blood Oxygen Drop: %.1f%% → %.1f%% (%.1f%% drop in %d seconds)",
-                                        current.getMeasurementValue(),
-                                        next.getMeasurementValue(),
-                                        valueDiff,
-                                        timeDiff / 1000),
-                                next.getTimestamp()
-                        ));
+                        generator.triggerAlert(
+                                generator.getBloodOxygenFactory().createAlert(
+                                        String.valueOf(patientId),
+                                        String.format("Rapid Blood Oxygen Drop: %.1f%% → %.1f%% (%.1f%% drop in %d seconds)",
+                                                current.getMeasurementValue(),
+                                                next.getMeasurementValue(),
+                                                valueDiff,
+                                                timeDiff / 1000),
+                                        next.getTimestamp()
+                                )
+                        );
                         break;
                     }
                 } else {

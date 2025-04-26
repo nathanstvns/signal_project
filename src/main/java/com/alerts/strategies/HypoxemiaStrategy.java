@@ -52,13 +52,15 @@ public class HypoxemiaStrategy implements AlertStrategy {
             // Use the most recent timestamp between the two measurements
             long timestamp = Math.max(latestOxygen.getTimestamp(), latestSystolic.getTimestamp());
 
-            generator.triggerAlert(new Alert(
-                    String.valueOf(patientId),
-                    String.format("Hypotensive Hypoxemia: Blood Oxygen %.1f%% and Systolic BP %.1f mmHg",
-                            latestOxygen.getMeasurementValue(),
-                            latestSystolic.getMeasurementValue()),
-                    timestamp
-            ));
+            generator.triggerAlert(
+                    generator.getHypoxemiaFactory().createAlert(
+                            String.valueOf(patientId),
+                            String.format("Hypotensive Hypoxemia: Blood Oxygen %.1f%% and Systolic BP %.1f mmHg",
+                                    latestOxygen.getMeasurementValue(),
+                                    latestSystolic.getMeasurementValue()),
+                            timestamp
+                    )
+            );
         }
     }
 }

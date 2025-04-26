@@ -6,6 +6,7 @@ import com.data_management.PatientRecord;
 import com.alerts.strategies.*;
 import java.util.List;
 import java.util.ArrayList;
+import com.alerts.factories.*;
 
 /**
  * The {@code AlertGenerator} class is responsible for monitoring patient data
@@ -14,6 +15,13 @@ import java.util.ArrayList;
  * it against specific health criteria.
  */
 public class AlertGenerator {
+
+    private AlertFactory bloodPressureFactory = new BloodPressureAlertFactory();
+    private AlertFactory bloodOxygenFactory = new BloodOxygenAlertFactory();
+    private AlertFactory ecgFactory = new ECGAlertFactory();
+    private AlertFactory hypoxemiaFactory = new HypoxemiaAlertFactory();
+    private AlertFactory triggeredAlertFactory = new TriggeredAlertFactory();
+
     private DataStorage dataStorage;
     private List<AlertStrategy> strategies;
 
@@ -67,4 +75,24 @@ public class AlertGenerator {
                 " for patient " + alert.getPatientId() +
                 " at time " + alert.getTimestamp());
     }
+    public AlertFactory getBloodPressureFactory() {
+        return bloodPressureFactory;
+    }
+
+    public AlertFactory getBloodOxygenFactory() {
+        return bloodOxygenFactory;
+    }
+
+    public AlertFactory getECGFactory() {
+        return ecgFactory;
+    }
+
+    public AlertFactory getHypoxemiaFactory() {
+        return hypoxemiaFactory;
+    }
+
+    public AlertFactory getTriggeredAlertFactory() {
+        return triggeredAlertFactory;
+    }
+
 }

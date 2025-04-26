@@ -15,11 +15,13 @@ public class TriggeredAlertStrategy implements AlertStrategy {
         List<PatientRecord> records = patient.getRecords(Long.MIN_VALUE, Long.MAX_VALUE);
         for (PatientRecord record : records) {
             if (TRIGGERED_ALERT.equals(record.getRecordType())) {
-                generator.triggerAlert(new Alert(
-                        String.valueOf(patient.getPatientId()),
-                        "Triggered Alert: " + record.getMeasurementValue(),
-                        record.getTimestamp()
-                ));
+                generator.triggerAlert(
+                        generator.getTriggeredAlertFactory().createAlert(
+                                String.valueOf(patient.getPatientId()),
+                                "Triggered Alert: " + record.getMeasurementValue(),
+                                record.getTimestamp()
+                        )
+                );
             }
         }
     }
