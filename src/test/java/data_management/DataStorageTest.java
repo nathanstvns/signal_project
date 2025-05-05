@@ -11,6 +11,7 @@ import com.data_management.DataStorage;
 import com.data_management.DataReader;
 import com.data_management.FileDataReader;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.nio.file.*;
 
@@ -27,7 +28,7 @@ class DataStorageTest {
         reader = mock(DataReader.class);
 
 
-        storage = new DataStorage();
+        storage = DataStorage.getInstance();
 
 
         try {
@@ -53,7 +54,7 @@ class DataStorageTest {
     }
     @Test
     public void testReadData() throws IOException {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         FileDataReader reader = new FileDataReader("output");
 
 
