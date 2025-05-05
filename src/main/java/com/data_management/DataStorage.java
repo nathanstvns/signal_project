@@ -14,14 +14,13 @@ import com.alerts.AlertGenerator;
  */
 public class DataStorage {
     private static DataStorage instance;
-    private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
+    private final Map<Integer, Patient> patientMap = new java.util.concurrent.ConcurrentHashMap<>(); // Stores patient objects indexed by their unique patient ID.
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
      * structure.
      */
     private DataStorage() {
-        this.patientMap = new HashMap<>();
     }
     public static synchronized DataStorage getInstance() {
         if (instance == null) {
@@ -44,11 +43,7 @@ public class DataStorage {
      *                         milliseconds since the Unix epoch
      */
     public void addPatientData(int patientId, double measurementValue, String recordType, long timestamp) {
-        Patient patient = patientMap.get(patientId);
-        if (patient == null) {
-            patient = new Patient(patientId);
-            patientMap.put(patientId, patient);
-        }
+        Patient patient = (Patient) patientMap.computeIfAbsent(patientId, id -> new Patient(id));
         patient.addRecord(measurementValue, recordType, timestamp);
     }
 
