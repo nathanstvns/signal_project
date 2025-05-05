@@ -69,7 +69,7 @@ public class AlertGenerator {
      *
      * @param alert the alert object containing details about the alert condition
      */
-    public void triggerAlert(Alert alert) {
+    public void triggerAlert(AlertInterface alert) {
         // Implementation might involve logging the alert or notifying staff
         System.out.println("ALERT: " + alert.getCondition() +
                 " for patient " + alert.getPatientId() +
