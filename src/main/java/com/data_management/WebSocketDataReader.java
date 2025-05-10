@@ -11,7 +11,7 @@ import java.io.IOException;
 public class WebSocketDataReader implements DataReader, MyWebSocketMessageHandler {
     private MyWebSocketClient client;
     private final String serverUrl;
-    private DataStorage dataStorage;
+    public DataStorage dataStorage;
     private volatile boolean isConnected = false;
 
     public WebSocketDataReader(String serverUrl) {
