@@ -55,4 +55,5 @@ public class WebSocketOutputStrategy implements OutputStrategy {
             System.out.println("Server started successfully");
         }
     }
+    //mvnd exec:java "-Dexec.mainClass=com.cardio_generator.HealthDataSimulator" "-Dexec.args=--output websocket:8080"
 }

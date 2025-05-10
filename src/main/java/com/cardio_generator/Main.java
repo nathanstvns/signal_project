@@ -1,40 +1,54 @@
 package com.cardio_generator;
 
+import com.data_management.*;
 import com.alerts.AlertGenerator;
-import com.data_management.DataReader;
-import com.data_management.DataStorage;
-import com.data_management.Patient;
-import com.data_management.WebSocketDataReader;
 
-import java.io.IOException;
+import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        if (args.length > 0 && args[0].equals("DataStorage")) {
-            com.data_management.DataStorage.main(new String[]{});
-        } else {
-            HealthDataSimulator.main(new String[]{});
-        }
-
-    try {
-
-        DataReader reader = new WebSocketDataReader("ws://localhost:8080");
+    public static void main(String[] args) {
         DataStorage storage = DataStorage.getInstance();
+        DataReader reader = new WebSocketDataReader("ws://localhost:8080");
 
-        // read data fro m WebSocket
-        reader.readData(storage);
-
-
-        AlertGenerator alertGenerator = new AlertGenerator(storage);
-
-        while (true) {
-            Thread.sleep(1000);
-            // Evaluate data for all patiënts
-            for (Patient patient : storage.getAllPatients()) {
-                alertGenerator.evaluateData(patient);
+        // try to connect to the server until it works
+        boolean connected = false;
+        while (!connected) {
+            try {
+                reader.readData(storage);
+                connected = true;
+            } catch (Exception e) {
+                System.err.println("WebSocket server unreachable, trying again in 2 seconds...");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }}
+
+        AlertGenerator alertGenerator = new AlertGenerator(storage);
+        while (true) {
+            try {
+                Thread.sleep(1000);
+                for (Patient patient : storage.getAllPatients()) {
+                    List<PatientRecord> records = patient.getRecords(Long.MIN_VALUE, Long.MAX_VALUE);
+                    if (!records.isEmpty()) {
+                        PatientRecord last = records.get(records.size() - 1);
+                        System.out.printf("Patient ID: %d, Timestamp: %d, Label: %s, Data: %s%n",
+                                last.getPatientId(),
+                                last.getTimestamp(),
+                                last.getRecordType(),
+                                last.getMeasurementValue());
+                    }
+                    alertGenerator.evaluateData(patient);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+
+
+    }
 }
